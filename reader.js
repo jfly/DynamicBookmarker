@@ -37,12 +37,12 @@ var PainlessJson = function(url) {
 
     url = url || 'http://jfly.algnex.us/painlessjson/painlessjson.py';
 	this.getJsonLink = function(user, app) {
-		return url + "?" + tnoodle.toQueryString({user: user, app: app});
+		return url + "?" + tnoodle.toQueryString({user: user, domain: app});
 	};
     this.get = function(user, app, callback) {
         data = {
             user: user,
-            app: app
+            domain: app
         };
         var oldcallback = callback;
         callback = function(data) {
@@ -58,7 +58,7 @@ var PainlessJson = function(url) {
     this.put = function(user, app, value, callback) {
         data = {
             user: user,
-            app: app,
+            domain: app,
             value: JSON.stringify(value)
         };
         tnoodle.jsonp(callback, url, data);
