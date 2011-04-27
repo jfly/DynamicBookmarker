@@ -234,6 +234,7 @@ function createIframeBar() {
 		bar.appendChild(document.createTextNode(' '));
 
 		// somehow smbc is resetting these values when navigating
+		window.bar = bar; window.iframe = iframe;
 		bar.style.top = '0px';
 		iframe.style.top = "0px"; // weirdness...
 		setTimeout(function() {
