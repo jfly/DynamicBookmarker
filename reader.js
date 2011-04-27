@@ -151,7 +151,7 @@ function updateBookmark(host, newUrl) {
 	// load the latest bookmarks before saving
 	// i'm sure this is a terribly racy solution, but it doesn't really matter
 	painless.get(username, app, function(data) {
-		assert(data.success, 'error loading bookmarks');
+		assert(data.success, 'error loading bookmarks1');
 		var oldUrl = hostsMap[domain];
 		assert(oldUrl, 'domain ' + domain + 'not found in hostsMap');
 		hostsMap = data.value;
@@ -168,7 +168,7 @@ function updateBookmark(host, newUrl) {
 		}
 
 		painless.put(username, app, hostsMap, function(data) {
-			assert(data.success, 'error saving bookmarks');
+			assert(data.success, 'error saving bookmarks2');
 		});
 	});
 }
