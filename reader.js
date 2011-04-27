@@ -129,7 +129,7 @@ function loadBookmarks() {
 	// TODO - check if user went off and read on a diff computer
 	// TODO - some way to refresh, get url
 	painless.get(username, app, function(data) {
-		assert(data.success, 'error loading bookmarks');
+		assert(data.success, 'error loading bookmarks ' + username + " " + app);
 		hostsMap = data.value;
 		if(typeof(hostsMap) != "object" || !hostsMap) {
 			hostsMap = {};
@@ -151,7 +151,7 @@ function updateBookmark(host, newUrl) {
 	// load the latest bookmarks before saving
 	// i'm sure this is a terribly racy solution, but it doesn't really matter
 	painless.get(username, app, function(data) {
-		assert(data.success, 'error loading bookmarks1');
+		assert(data.success, 'error loading bookmarks2 for ' + username + " " + app);
 		var oldUrl = hostsMap[domain];
 		assert(oldUrl, 'domain ' + domain + 'not found in hostsMap');
 		hostsMap = data.value;
