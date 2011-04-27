@@ -239,7 +239,7 @@ function createIframeBar() {
 		}
 
 		var loginLink = createLink('', username || 'Sign in');
-		loginLink.style.right = '55px';
+		loginLink.style.right = '70px';
 		loginLink.style.position = 'absolute';
 		loginLink.onclick = function(e) {
 			var newUsername = prompt("who are you? who who");
@@ -259,7 +259,7 @@ function createIframeBar() {
 		if(username !== null) {
 			var jsonLink = createLink(painless.getJsonLink(username, app), 'json');
 			jsonLink.target = '_blank';
-			jsonLink.style.right = '20px';
+			jsonLink.style.right = '35px';
 			jsonLink.style.position = 'absolute';
 			bar.appendChild(jsonLink);
 			bar.appendChild(document.createTextNode(' '));
@@ -267,7 +267,7 @@ function createIframeBar() {
 
 		var aboutLink = createLink('', '@');
 		aboutLink.title = 'About DynamicBookmarker'
-		aboutLink.style.right = '5px';
+		aboutLink.style.right = '20px';
 		aboutLink.style.position = 'absolute';
 		aboutLink.onclick = function(e) {
 			alert('DynamicBookmarker version ' + VERSION + '\n' +
