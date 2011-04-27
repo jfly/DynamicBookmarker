@@ -96,11 +96,14 @@ function assert(expr, string) {
 function getDesiredUrl() {
 	return document.location.hash.substring(1) || document.location.href;
 }
+function exit() {
+	document.location.href = getDesiredUrl();
+}
 
 // Handle reclick of bookmarklet
 if(typeof(DynamicBookmarker) != 'undefined' && DynamicBookmarker.enter) {
     if(confirm("DynamicBookmarker.enter already defined, breaking out of iframe to " + getDesiredUrl())) {
-        document.location.href = getDesiredUrl();
+		exit();
     }
     return;
 }
@@ -148,32 +151,36 @@ function updateBookmark(host, newUrl) {
 	// this is a little tricky
 	// if 2 tabs are using DynamicBookmarker, then they'll quickly get out of
 	// sync with one another
-	// to avoid stomping all over a different domain's bookmark, we need to first
+	// to avoid stomping all over a different host's bookmark, we need to first
 	// load the latest bookmarks before saving
 	// i'm sure this is a terribly racy solution, but it doesn't really matter
 	painless.get(username, app, function(data) {
 		assert(data.success, 'error loading bookmarks2 for ' + username + " " + app);
-		var oldUrl = hostsMap[domain];
-		assert(oldUrl, 'domain ' + domain + 'not found in hostsMap');
+		var oldUrl = hostsMap[host];
+		assert(oldUrl, 'host' + host + 'not found in hostsMap');
 		hostsMap = data.value;
 		// copied from loadBookmarks
 		if(typeof(hostsMap) != "object" || !hostsMap) {
 			hostsMap = {};
 		}
-		if(domain in hostsMap && hostsMap[domain] != oldUrl) {
-			if(!confirm('The url stored for ' + domain + ' was ' + hostsMap[domain] + ', we expected ' + oldUrl + '\n'+
-					    'Click ok to proceed with storing ' + newUrl + ' for ' + domain)) {
+		if(host in hostsMap && hostsMap[host] != oldUrl) {
+			if(!confirm('The url stored for ' + host + ' was ' + hostsMap[host] + ', we expected ' + oldUrl + '\n'+
+					    'Click ok to proceed with storing ' + newUrl + ' for ' + host)) {
 				return;
 			}
 		}
-		if(newUrl) {
-			hostsMap[domain] = newUrl;
-		} else {
-			delete hostsMap[domain];
-		}
-		bar.refresh(); // update hosts in bar
 		painless.put(username, app, hostsMap, function(data) {
 			assert(data.success, 'error saving bookmarks2');
+
+			if(newUrl) {
+				hostsMap[host] = newUrl;
+			} else {
+				delete hostsMap[host];
+				if(host == domain) {
+					exit();
+				}
+			}
+			bar.refresh(); // update hosts in bar
 		});
 	});
 }
@@ -211,9 +218,17 @@ function createIframeBar() {
 				bar.appendChild(deleteHostLink);
 				deleteHostLink.onclick = (function(host) {
 					return function(e) {
-						if(confirm("Are you sure you want to delete the url for " + host + '?')) {
-							updateBookmark(host, null);
-							bar.refresh();
+						if(host == domain) {
+							if(confirm("Are you sure you want to delete the url for " + host + '?\n' +
+									   "This will close the DynamicBookmarker toolbar.")) {
+								updateBookmark(host, null);
+								bar.refresh();
+							}
+						} else {
+							if(confirm("Are you sure you want to delete the url for " + host + '?')) {
+								updateBookmark(host, null);
+								bar.refresh();
+							}
 						}
 						return false;
 					};
@@ -256,7 +271,7 @@ function createIframeBar() {
 		closeLink.style.right = '5px';
 		closeLink.style.position = 'absolute';
 		closeLink.onclick = function(e) {
-			document.location.href = getDesiredUrl();
+			exit();
 			return false;
 		};
 
