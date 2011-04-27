@@ -160,7 +160,6 @@ function createIframeBar() {
     bar.style.postition = 'absolute';
     bar.style.top = '0px';
     bar.style.left = '0px';
-    bar.style.width = '100%';
     bar.style.height = '18px';
     bar.style.background = 'red';
     bar.style['padding-left'] = '5px';
@@ -271,6 +270,7 @@ function createIframeBar() {
 	window.onresize = function(e) {
 		iframe.style.width = window.innerWidth + 'px';
 		iframe.style.height = window.innerHeight + 'px';
+		bar.style.width = window.innerWidth + 'px';
 	};
 	window.onresize();
     document.body.appendChild(iframe);
