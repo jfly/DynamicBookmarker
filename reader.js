@@ -155,7 +155,7 @@ function updateBookmark(host, newUrl) {
 		var oldUrl = hostsMap[domain];
 		assert(oldUrl, 'domain ' + domain + 'not found in hostsMap');
 		hostsMap = data.value;
-		if(hostsMap[domain] != oldUrl) {
+		if(domain in hostsMap && hostsMap[domain] != oldUrl) {
 			if(!confirm('The url stored for ' + domain + ' was ' + hostsMap[domain] + ', we expected ' + oldUrl + '\n'+
 					    'Click ok to proceed with storing ' + newUrl + ' for ' + domain)) {
 				return;
