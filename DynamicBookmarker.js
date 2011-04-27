@@ -1,5 +1,5 @@
 (function() {
-var VERSION = 1.0;
+var VERSION = "1.1";
 
 // copied from painlessjson
 var PainlessJson = function(url) {
@@ -240,7 +240,7 @@ function createIframeBar() {
 		}
 
 		var loginLink = createLink('', username || 'Sign in');
-		loginLink.style.right = '70px';
+		loginLink.style.right = '75px';
 		loginLink.style.position = 'absolute';
 		loginLink.onclick = function(e) {
 			var newUsername = prompt("who are you? who who");
@@ -260,7 +260,7 @@ function createIframeBar() {
 		if(username !== null) {
 			var jsonLink = createLink(painless.getJsonLink(username, app), 'json');
 			jsonLink.target = '_blank';
-			jsonLink.style.right = '35px';
+			jsonLink.style.right = '40px';
 			jsonLink.style.position = 'absolute';
 			bar.appendChild(jsonLink);
 			bar.appendChild(document.createTextNode(' '));
