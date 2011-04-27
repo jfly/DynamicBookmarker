@@ -240,7 +240,7 @@ function createIframeBar() {
 			iframe.style.top = "0px"; // weirdness...
 			iframe.style.top = "18px";
 			iframe.style.left = "0px";
-		}, 0);
+		}, 100);
 	};
 
     iframe = document.createElement('iframe');
