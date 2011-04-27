@@ -274,6 +274,8 @@ function createIframeBar() {
 				 'Made by Jeremy Fleischman in April 2011 to help him get through Schlock Mercenary and Nuklear Power.');
 			return false;
 		};
+		bar.appendChild(aboutLink);
+		bar.appendChild(document.createTextNode(' '));
 
 		var closeLink = createLink('', 'X');
 		closeLink.style.right = '5px';
@@ -282,7 +284,6 @@ function createIframeBar() {
 			exit();
 			return false;
 		};
-
 		bar.appendChild(closeLink);
 		bar.appendChild(document.createTextNode(' '));
 	};
