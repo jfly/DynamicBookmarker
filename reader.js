@@ -157,7 +157,7 @@ function updateBookmark(host, newUrl) {
 		hostsMap = data.value;
 		if(hostsMap[domain] != oldUrl) {
 			if(!confirm('The url stored for ' + domain + ' was ' + hostsMap[domain] + ', we expected ' + oldUrl + '\n'+
-					    'Click ok to proceed with storing ' +  + ' for ' + domain)) {
+					    'Click ok to proceed with storing ' + newUrl + ' for ' + domain)) {
 				return;
 			}
 		}
