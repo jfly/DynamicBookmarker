@@ -1,6 +1,7 @@
 (function() {
 // copied from painlessjson
 var PainlessJson = function(url) {
+	var VERSION = 1.0;
     // copied from tnoodletimer
     tnoodle = {};
     tnoodle.jsonpcount = 1;
@@ -263,6 +264,16 @@ function createIframeBar() {
 			bar.appendChild(jsonLink);
 			bar.appendChild(document.createTextNode(' '));
 		}
+
+		var aboutLink = createLink('', '@');
+		aboutLink.title = 'About DynamicBookmarker'
+		aboutLink.style.right = '5px';
+		aboutLink.style.position = 'absolute';
+		aboutLink.onclick = function(e) {
+			alert('DynamicBookmarker version ' + VERSION + '\n' +
+				 'Made by Jeremy Fleischman in April 2011 to help him get through Schlock Mercenary and Nuklear Power.');
+			return false;
+		};
 
 		var closeLink = createLink('', 'X');
 		closeLink.style.right = '5px';

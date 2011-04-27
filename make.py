@@ -4,7 +4,7 @@ import subprocess, sys
 
 # Note, the js code makes use of eval, which means we can't let the compiler
 # change variable names
-proc = subprocess.Popen('java -jar compiler.jar --js "%s" --compilation_level WHITESPACE_ONLY' % 'readerstub.js', stdout=subprocess.PIPE, shell=True)
+proc = subprocess.Popen('java -jar compiler.jar --js "%s" --compilation_level WHITESPACE_ONLY' % 'DynamicBookmarkerStub.js', stdout=subprocess.PIPE, shell=True)
 js, stderr = proc.communicate()
 if proc.wait() != 0:
     print stderr
