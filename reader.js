@@ -234,11 +234,13 @@ function createIframeBar() {
 		bar.appendChild(document.createTextNode(' '));
 
 		// somehow smbc is resetting these values when navigating
-		bar.style.top = '0px';
-		bar.style.left = '0px';
-		iframe.style.top = "0px"; // weirdness...
-		iframe.style.top = "18px";
-		iframe.style.left = "0px";
+		setTimeout(function() {
+			bar.style.top = '0px';
+			bar.style.left = '0px';
+			iframe.style.top = "0px"; // weirdness...
+			iframe.style.top = "18px";
+			iframe.style.left = "0px";
+		}, 0);
 	};
 
     iframe = document.createElement('iframe');
