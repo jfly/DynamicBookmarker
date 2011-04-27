@@ -145,7 +145,7 @@ function loadBookmarks() {
 			hostsMap[domain] = document.location.href;
 		}
 		bar.refresh();
-		iframe.contentWindow.location.href = hostsMap[domain];
+		iframe.contentWindow.location.href = hostsMap[domain].split('#')[0];
 	});
 }
 
