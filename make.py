@@ -1,0 +1,94 @@
+#!/usr/bin/python
+
+import subprocess, sys
+
+# Note, the js code makes use of eval, which means we can't let the compiler
+# change variable names
+proc = subprocess.Popen('java -jar compiler.jar --js "%s" --compilation_level WHITESPACE_ONLY' % 'readerstub.js', stdout=subprocess.PIPE, shell=True)
+js, stderr = proc.communicate()
+if proc.wait() != 0:
+    print stderr
+    sys.exit(1)
+
+js = js.replace('"', "'")
+
+html = """
+<html>
+<head>
+</head>
+<body>
+
+<h1>Why?</h1>
+<p>
+There are lots of ways to stay up to date on blogs and webcomics (Google Reader is a great example of such a program).
+They all do a great job of keeping you up to date on your favorite web periodicals. However, none of them provide a very
+good mechanism for <strong>starting</strong> a new webcomic. If you add xkcd.com to your Google Reader feed, you'll only
+have access to all future xkcd comics, but none from the past.
+</p>
+<p>
+My solution to this problem has simply been to pull a marathon catching up to the present and then staying up to date with
+Google Reader. I don't think I've ever actually managed to do this because I'd keep losing track of where I was in the comic.
+</p>
+
+<h1>What?</h1>
+<p>
+Using your favorite browser's bookmarking system partially solves this problem, but you need to remember to update your bookmarks
+after every single comic you read. What is really needed is a form of "dynamic bookmark" that updates every time you click
+the "next comic" link.
+</p>
+<p>
+DynamicBookmarker aims to do just this. It's a bookmarklet, so it should run on any (sufficiently compliant) webbrowser. However, I've only
+tested it on Google Chrome and Firefox.
+</p>
+
+<h1>Pictures!</h1>
+
+<p>
+To install, simply drag <a href="javascript:%s">DynamicBookmarker</a> to your bookmark bar.
+<img src="readme-img/installation.png" />
+</p>
+
+<p>
+Then go to your favorite webcomic and click on the <strong>DynamicBookmarker</strong> bookmarklet.
+<img src="readme-img/prelogin.png" />
+</p>
+
+<p>
+Sign in. Note: There is no signing up, or password protection. For now, this service is entirely trust based.
+<img src="readme-img/login.png" />
+</p>
+
+<p>
+Once you're logged in, you should see a list of webcomics you're in the middle of reading.
+<img src="readme-img/loggedin.png" />
+</p>
+
+<p>
+As you read the webcomic, note that only the "#" part of the url changes. The title of the website
+should also be prefixed with "DynamicBookmarker" (the images are a little outdated, they say "Webreader" instead)
+<img src="readme-img/browsing.png" />
+</p>
+
+<p>
+Restart browser, go back to favorite webcomic.
+<img src="readme-img/restart.png" />
+</p>
+
+<p>
+Click on DynamicBookmarker. Your username was stored in a cookie, so you should automatically be directed to the last comic you read. Enjoy!
+<img src="readme-img/reloggedin.png" />
+</p>
+
+<h1>Dirty Details</h1>
+<p>iframes, jsonp, and cookies, oh my!</p>
+<p>Data are stored <a href="http://jfly.algnex.us/painlessjson/painlessjson.py?user=jeremy&domain=DynamicBookmarker">here</a>.</p>
+<p>Cookies are stored <a href="http://jfly.algnex.us/painlessjson/painlesscookies.py">here</a>.</p>
+
+<h1>Contact</h1>
+<p>Please contact me at <a href="mailto:jeremyfleischman@sbcglobal.net">jeremyfleischman@sbcglobal.net</a> with bugs and feature requests.</p>
+
+</body>
+</html>""" % js
+f = file('index.html', 'w')
+f.write(html)
+f.close()
