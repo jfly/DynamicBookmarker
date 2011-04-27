@@ -158,6 +158,8 @@ function createIframeBar() {
 
     bar = document.createElement('div');
     bar.style.postition = 'absolute';
+    bar.style.top = '0px';
+    bar.style.left = '0px';
     bar.style.height = '18px';
     bar.style.background = 'red';
     bar.style['padding-left'] = '5px';
@@ -232,20 +234,13 @@ function createIframeBar() {
 
 		bar.appendChild(closeLink);
 		bar.appendChild(document.createTextNode(' '));
-
-		// somehow smbc is resetting these values when navigating
-		window.bar = bar; window.iframe = iframe;
-		bar.style.top = '0px';
-		iframe.style.top = "0px"; // weirdness...
-		setTimeout(function() {
-			bar.style.left = '0px';
-			iframe.style.top = "18px";
-			iframe.style.left = "0px";
-		}, 100);
 	};
+	bar.refresh();
 
     iframe = document.createElement('iframe');
     iframe.style.position = "absolute";
+    iframe.style.top = "18px";
+    iframe.style.left = "0px";
     iframe.style.border = "0";
     iframe.src = document.location.href;
     iframe.onload = function(e) {
@@ -268,6 +263,8 @@ function createIframeBar() {
 			bar.refresh(); // update hosts in bar
 			saveHosts();
 		}
+		// if a user clicks on a link with a hashtag, it may invoke scrolling of the outer page (not the iframe)
+		window.scrollTo(0, 0);
     };
     window.onhashchange = function(e) {
         //TODO - history navigating is screwy
@@ -281,8 +278,6 @@ function createIframeBar() {
 		iframe.style.height = window.innerHeight + 'px';
 		bar.style.width = window.innerWidth + 'px';
 	};
-
-	bar.refresh();
 	window.onresize();
     document.body.appendChild(iframe);
 }
