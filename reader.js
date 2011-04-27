@@ -131,6 +131,7 @@ function loadBookmarks() {
 	painless.get(username, app, function(data) {
 		assert(data.success, 'error loading bookmarks ' + username + " " + app);
 		hostsMap = data.value;
+		// copied from updateBookmark
 		if(typeof(hostsMap) != "object" || !hostsMap) {
 			hostsMap = {};
 		}
@@ -155,6 +156,10 @@ function updateBookmark(host, newUrl) {
 		var oldUrl = hostsMap[domain];
 		assert(oldUrl, 'domain ' + domain + 'not found in hostsMap');
 		hostsMap = data.value;
+		// copied from loadBookmarks
+		if(typeof(hostsMap) != "object" || !hostsMap) {
+			hostsMap = {};
+		}
 		if(domain in hostsMap && hostsMap[domain] != oldUrl) {
 			if(!confirm('The url stored for ' + domain + ' was ' + hostsMap[domain] + ', we expected ' + oldUrl + '\n'+
 					    'Click ok to proceed with storing ' + newUrl + ' for ' + domain)) {
