@@ -278,7 +278,7 @@ function createIframeBar() {
             return;
         }
 		if(hostsMap !== null) {
-			document.title = 'DynamicBookmarker - ' + iframe.contentWindow.document.title;
+			document.title = '@ - ' + iframe.contentWindow.document.title;
 			url = url.split('#')[0];
 			document.location.hash = url;
 			updateBookmark(domain, url);
