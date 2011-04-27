@@ -1,7 +1,8 @@
 (function() {
+var VERSION = 1.0;
+
 // copied from painlessjson
 var PainlessJson = function(url) {
-	var VERSION = 1.0;
     // copied from tnoodletimer
     tnoodle = {};
     tnoodle.jsonpcount = 1;
