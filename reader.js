@@ -166,6 +166,7 @@ function updateBookmark(host, newUrl) {
 		} else {
 			delete hostsMap[domain];
 		}
+		console.log(hostsMap);
 
 		painless.put(username, app, hostsMap, function(data) {
 			assert(data.success, 'error saving bookmarks2');
