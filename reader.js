@@ -36,13 +36,13 @@ var PainlessJson = function(url) {
     };
 
     url = url || 'http://jfly.algnex.us/painlessjson/painlessjson.py';
-	this.getJsonLink = function(user, domain) {
-		return url + "?" + tnoodle.toQueryString({user: user, domain: domain});
+	this.getJsonLink = function(user, app) {
+		return url + "?" + tnoodle.toQueryString({user: user, app: app});
 	};
-    this.get = function(user, domain, callback) {
+    this.get = function(user, app, callback) {
         data = {
             user: user,
-            domain: domain
+            app: app
         };
         var oldcallback = callback;
         callback = function(data) {
@@ -55,10 +55,10 @@ var PainlessJson = function(url) {
         };
         tnoodle.jsonp(callback, url, data);
     };
-    this.put = function(user, domain, value, callback) {
+    this.put = function(user, app, value, callback) {
         data = {
             user: user,
-            domain: domain,
+            app: app,
             value: JSON.stringify(value)
         };
         tnoodle.jsonp(callback, url, data);
@@ -93,11 +93,6 @@ function assert(expr, string) {
 		alert(string);
 	}
 }
-function saveHosts() {
-	painless.put(username, app, hostsMap, function(data) {
-		assert(data.success, 'error saving bookmarks');
-	});
-}
 function getDesiredUrl() {
 	return document.location.hash.substring(1) || document.location.href;
 }
@@ -112,6 +107,7 @@ if(typeof(DynamicBookmarker) != 'undefined' && DynamicBookmarker.enter) {
 
 var painless = new PainlessJson();
 var app = 'DynamicBookmarker';
+var domain = document.location.host;
 var hostsMap = null, username = null;
 var iframe = null, bar = null;
 
@@ -138,7 +134,6 @@ function loadBookmarks() {
 		if(typeof(hostsMap) != "object" || !hostsMap) {
 			hostsMap = {};
 		}
-		var domain = document.location.host;
 		if(!hostsMap[domain]) {
 			// no need to save this here, as it will get saved one the
 			// iframe finishes loading it
@@ -147,6 +142,35 @@ function loadBookmarks() {
 		bar.refresh();
 		iframe.contentWindow.location.href = hostsMap[domain].split('#')[0];
 	});
+}
+function updateBookmark(host, newUrl) {
+	// this is a little tricky
+	// if 2 tabs are using DynamicBookmarker, then they'll quickly get out of
+	// sync with one another
+	// to avoid stomping all over a different domain's bookmark, we need to first
+	// load the latest bookmarks before saving
+	// i'm sure this is a terribly racy solution, but it doesn't really matter
+	painless.get(username, app, function(data) {
+		assert(data.success, 'error loading bookmarks');
+		var oldUrl = hostsMap[domain];
+		assert(oldUrl, 'domain ' + domain + 'not found in hostsMap');
+		hostsMap = data.value;
+		if(hostsMap[domain] != oldUrl) {
+			if(!confirm('The url stored for ' + domain + ' was ' + hostsMap[domain] + ', we expected ' + oldUrl + '\n'+
+					    'Click ok to proceed with storing ' +  + ' for ' + domain)) {
+				return;
+			}
+		}
+		if(newUrl) {
+			hostsMap[domain] = newUrl;
+		} else {
+			delete hostsMap[domain];
+		}
+
+		painless.put(username, app, hostsMap, function(data) {
+			assert(data.success, 'error saving bookmarks');
+		});
+	};
 }
 
 function createIframeBar() {
@@ -183,9 +207,8 @@ function createIframeBar() {
 				deleteHostLink.onclick = (function(host) {
 					return function(e) {
 						if(confirm("Are you sure you want to delete the url for " + host + '?')) {
-							delete hostsMap[host];
+							updateBookmark(host, null);
 							bar.refresh();
-							saveHosts();
 						}
 						return false;
 					};
@@ -244,7 +267,6 @@ function createIframeBar() {
     iframe.style.border = "0";
     iframe.src = document.location.href;
     iframe.onload = function(e) {
-		var domain = document.location.host;
         //TODO - recurse through dom and add listeners for every linky?
         var url = iframe.contentWindow.location.href;
         /*iframe.contentWindow.onbeforeunload = function(e) {
@@ -259,9 +281,8 @@ function createIframeBar() {
 			document.title = 'DynamicBookmarker - ' + iframe.contentWindow.document.title;
 			url = url.split('#')[0];
 			document.location.hash = url;
-			hostsMap[domain] = url;
+			updateBookmark(domain, url);
 			bar.refresh(); // update hosts in bar
-			saveHosts();
 		}
 		// if a user clicks on a link with a hashtag, it may invoke scrolling of the outer page (not the iframe)
 		window.scrollTo(0, 0);
@@ -275,7 +296,7 @@ function createIframeBar() {
     };
 	window.onresize = function(e) {
 		iframe.style.width = window.innerWidth + 'px';
-		iframe.style.height = window.innerHeight + 'px';
+		iframe.style.height = (window.innerHeight-18) + 'px';
 		bar.style.width = window.innerWidth + 'px';
 	};
 	window.onresize();
