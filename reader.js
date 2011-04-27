@@ -170,7 +170,7 @@ function updateBookmark(host, newUrl) {
 		painless.put(username, app, hostsMap, function(data) {
 			assert(data.success, 'error saving bookmarks');
 		});
-	};
+	});
 }
 
 function createIframeBar() {
