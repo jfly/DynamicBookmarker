@@ -239,7 +239,6 @@ function createIframeBar() {
 		iframe.style.top = "18px";
 		iframe.style.left = "0px";
 	};
-	bar.refresh();
 
     iframe = document.createElement('iframe');
     iframe.style.position = "absolute";
@@ -278,6 +277,8 @@ function createIframeBar() {
 		iframe.style.height = window.innerHeight + 'px';
 		bar.style.width = window.innerWidth + 'px';
 	};
+
+	bar.refresh();
 	window.onresize();
     document.body.appendChild(iframe);
 }
