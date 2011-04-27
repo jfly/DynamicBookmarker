@@ -158,8 +158,6 @@ function createIframeBar() {
 
     bar = document.createElement('div');
     bar.style.postition = 'absolute';
-    bar.style.top = '0px';
-    bar.style.left = '0px';
     bar.style.height = '18px';
     bar.style.background = 'red';
     bar.style['padding-left'] = '5px';
@@ -234,13 +232,17 @@ function createIframeBar() {
 
 		bar.appendChild(closeLink);
 		bar.appendChild(document.createTextNode(' '));
+
+		// somehow smbc is resetting these values when navigating
+		bar.style.top = '0px';
+		bar.style.left = '0px';
+		iframe.style.top = "18px";
+		iframe.style.left = "0px";
 	};
 	bar.refresh();
 
     iframe = document.createElement('iframe');
     iframe.style.position = "absolute";
-    iframe.style.top = "18px";
-    iframe.style.left = "0px";
     iframe.style.border = "0";
     iframe.src = document.location.href;
     iframe.onload = function(e) {
