@@ -254,7 +254,7 @@ function createIframeBar() {
         }
 		if(hostsMap !== null) {
 			document.title = 'DynamicBookmarker - ' + iframe.contentWindow.document.title;
-			hashIndex = url.split('#')[0];
+			url = url.split('#')[0];
 			document.location.hash = url;
 			hostsMap[domain] = url;
 			bar.refresh(); // update hosts in bar
