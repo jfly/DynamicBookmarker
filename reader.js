@@ -239,7 +239,8 @@ function createIframeBar() {
 
     iframe = document.createElement('iframe');
     iframe.style.position = "absolute";
-    iframe.style.top = "absolute";
+    iframe.style.top = "0px";
+    iframe.style.left = "0px";
     iframe.style.border = "0";
     iframe.src = document.location.href;
     iframe.onload = function(e) {
