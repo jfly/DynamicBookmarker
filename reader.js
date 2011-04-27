@@ -264,7 +264,7 @@ function createIframeBar() {
     window.onhashchange = function(e) {
         //TODO - history navigating is screwy
 		var url = getDesiredUrl();
-        if(iframe.contentWindow.location.href != url) {
+        if(iframe.contentWindow.location.href.split('#')[0] != url) {
             iframe.contentWindow.location.href = url;
         }
     };
