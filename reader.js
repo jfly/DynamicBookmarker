@@ -169,16 +169,15 @@ function updateBookmark(host, newUrl) {
 				return;
 			}
 		}
+		if(newUrl) {
+			hostsMap[host] = newUrl;
+		} else {
+			delete hostsMap[host];
+		}
 		painless.put(username, app, hostsMap, function(data) {
 			assert(data.success, 'error saving bookmarks2');
-
-			if(newUrl) {
-				hostsMap[host] = newUrl;
-			} else {
-				delete hostsMap[host];
-				if(host == domain) {
-					exit();
-				}
+			if(!newUrl && host == domain) {
+				exit();
 			}
 			bar.refresh(); // update hosts in bar
 		});
@@ -222,12 +221,10 @@ function createIframeBar() {
 							if(confirm("Are you sure you want to delete the url for " + host + '?\n' +
 									   "This will close the DynamicBookmarker toolbar.")) {
 								updateBookmark(host, null);
-								bar.refresh();
 							}
 						} else {
 							if(confirm("Are you sure you want to delete the url for " + host + '?')) {
 								updateBookmark(host, null);
-								bar.refresh();
 							}
 						}
 						return false;
