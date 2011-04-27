@@ -151,15 +151,10 @@ function updateBookmark(host, newUrl) {
 	// to avoid stomping all over a different domain's bookmark, we need to first
 	// load the latest bookmarks before saving
 	// i'm sure this is a terribly racy solution, but it doesn't really matter
-	var oldUrl = hostsMap[domain];
-	assert(oldUrl, 'domain ' + domain + 'not found in hostsMap');
-	if(newUrl) { //TODO - comment on why this is in 2 places
-		hostsMap[domain] = newUrl;
-	} else {
-		delete hostsMap[domain];
-	}
 	painless.get(username, app, function(data) {
 		assert(data.success, 'error loading bookmarks2 for ' + username + " " + app);
+		var oldUrl = hostsMap[domain];
+		assert(oldUrl, 'domain ' + domain + 'not found in hostsMap');
 		hostsMap = data.value;
 		// copied from loadBookmarks
 		if(typeof(hostsMap) != "object" || !hostsMap) {
@@ -176,7 +171,7 @@ function updateBookmark(host, newUrl) {
 		} else {
 			delete hostsMap[domain];
 		}
-
+		bar.refresh(); // update hosts in bar
 		painless.put(username, app, hostsMap, function(data) {
 			assert(data.success, 'error saving bookmarks2');
 		});
@@ -292,7 +287,6 @@ function createIframeBar() {
 			url = url.split('#')[0];
 			document.location.hash = url;
 			updateBookmark(domain, url);
-			bar.refresh(); // update hosts in bar
 		}
 		// if a user clicks on a link with a hashtag, it may invoke scrolling of the outer page (not the iframe)
 		window.scrollTo(0, 0);
